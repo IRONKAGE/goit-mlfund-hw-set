@@ -2886,59 +2886,69 @@ def shap_execution(
             # Перейменовуємо колонки у датафреймі перед відмальовуванням
             _X_sample_ua = _X_sample.rename(columns=UA_COLUMNS)
 
-            _fig, _ax = plt.subplots(figsize=(10, 6))
-
-            # 🔥 додавши max_display=12 - залише графік чистим і сфокусованим на головному
-            # проте мене цікавить показ всіх ознак, тому max_display не використовую
-            shap.summary_plot(_shap_values, _X_sample_ua, show=False)
-
             _theme = mo.app_meta().theme
-            _text_color = 'white' if _theme == 'dark' else '#1f2937'
+            _style = 'dark_background' if _theme == 'dark' else 'default'
 
-            _ax.set_title(
-                f"Квантова пояснюваність ({_selected_name}): Глобальний вплив ознак",
-                color=_text_color,
-                fontsize=15,
-                fontweight='bold',
-                pad=20
-            )
+            with plt.style.context(_style):
+                # 🛡️ Зберігаємо прозорість фону при експорті
+                plt.rcParams['savefig.transparent'] = True
 
-            if transform_strategy == "log":
-                _x_label = "Значення SHAP (Вплив на Логарифм ціни, log1p)"
-                _scale_note = "⚠️ <b>Увага:</b> <i>Модель навчалась на <b>логарифмі ціни</b>. Вплив на осі X показує зміну логарифма (наближено до % зміни).</i>"
-            elif transform_strategy == "sqrt":
-                _x_label = "Значення SHAP (Вплив на Квадратний корінь ціни)"
-                _scale_note = "⚠️ <b>Увага:</b> <i>Модель навчалась на <b>квадратному корені ціни</b>. Вплив на осі X є нелінійним.</i>"
-            else:
-                _x_label = "Значення SHAP (Вплив на прогноз ціни, $)"
-                _scale_note = "💵 <i>Вплив на осі X <b>розраховано у реальних доларах США</b>.</i>"
+                _fig, _ax = plt.subplots(figsize=(10, 6))
 
-            _ax.set_xlabel(_x_label)
+                # 🔥 додавши max_display=12 - залише графік чистим і сфокусованим на головному
+                # проте мене цікавить показ всіх ознак, тому max_display не використовую
+                shap.summary_plot(_shap_values, _X_sample_ua, show=False)
 
-            if _theme == "dark":
-                # Робимо фон повністю прозорим
+                _text_color = 'white' if _theme == 'dark' else '#1f2937'
+
+                _ax.set_title(
+                    f"Квантова пояснюваність ({_selected_name}): Глобальний вплив ознак",
+                    color=_text_color,
+                    fontsize=15,
+                    fontweight='bold',
+                    pad=20
+                )
+
+                if transform_strategy == "log":
+                    _x_label = "Значення SHAP (Вплив на Логарифм ціни, log1p)"
+                    _scale_note = "⚠️ <b>Увага:</b> <i>Модель навчалась на <b>логарифмі ціни</b>. Вплив на осі X показує зміну логарифма (наближено до % зміни).</i>"
+                elif transform_strategy == "sqrt":
+                    _x_label = "Значення SHAP (Вплив на Квадратний корінь ціни)"
+                    _scale_note = "⚠️ <b>Увага:</b> <i>Модель навчалась на <b>квадратному корені ціни</b>. Вплив на осі X є нелінійним.</i>"
+                else:
+                    _x_label = "Значення SHAP (Вплив на прогноз ціни, $)"
+                    _scale_note = "💵 <i>Вплив на осі X <b>розраховано у реальних доларах США</b>.</i>"
+
+                _ax.set_xlabel(_x_label, color=_text_color)
+
+                # Робимо фон повністю прозорим (щоб він зливався з кольором картки Marimo)
                 _fig.patch.set_facecolor('none')
                 _ax.set_facecolor('none')
-                _ax.xaxis.label.set_color('white')
-                _ax.yaxis.label.set_color('white')
-                _ax.tick_params(colors='white')
-                for spine in _ax.spines.values():
-                    spine.set_edgecolor('gray')
-
-            if len(_fig.axes) > 1:
-                _cbar_ax = _fig.axes[-1]
-                _cbar_ax.set_ylabel("Значення ознаки", rotation=270, labelpad=15)
-                # Безпечне призначення тиків для matplotlib > 3.3
-                _ticks = _cbar_ax.get_yticks()
-                _cbar_ax.set_yticks(_ticks)
-                _cbar_ax.set_yticklabels(["Низьке", "Високе"])
+                _ax.tick_params(colors=_text_color)
+                _ax.yaxis.label.set_color(_text_color)
+                _ax.xaxis.label.set_color(_text_color)
 
                 if _theme == "dark":
-                    _cbar_ax.yaxis.label.set_color('white')
-                    _cbar_ax.tick_params(colors='white')
+                    for spine in _ax.spines.values():
+                        spine.set_edgecolor('gray')
 
-            _plot_html = mo.as_html(_fig)
-            plt.close(_fig)
+                if len(_fig.axes) > 1:
+                    _cbar_ax = _fig.axes[-1]
+                    _cbar_ax.set_ylabel("Значення ознаки", rotation=270, labelpad=15)
+
+                    # Безпечне призначення тиків для matplotlib > 3.3
+                    _ticks = _cbar_ax.get_yticks()
+                    _cbar_ax.set_yticks(_ticks)
+                    _cbar_ax.set_yticklabels(["Низьке", "Високе"])
+                    _cbar_ax.yaxis.label.set_color(_text_color)
+                    _cbar_ax.tick_params(colors=_text_color)
+
+                    if _theme == "dark":
+                        for spine in _cbar_ax.spines.values():
+                            spine.set_edgecolor('gray')
+
+                _plot_html = mo.as_html(_fig)
+                plt.close(_fig)
 
             _css_no_scroll = mo.md(
                 """
@@ -3628,6 +3638,10 @@ def deploy_instructions(mo):
     _theme = mo.app_meta().theme
     _bg = "#1f2937" if _theme == "dark" else "#f9fafb"
     _border = "#4b5563" if _theme == "dark" else "#e5e7eb"
+    _pre_bg = "#111827" if _theme == "dark" else "#f3f4f6"
+    _pre_border = "#374151" if _theme == "dark" else "#d1d5db"
+    _pre_text_cmd = "#10b981" if _theme == "dark" else "#059669"
+    _pre_text_code = "#e5e7eb" if _theme == "dark" else "#374151"
 
     _css_no_scroll = mo.md(
         """
@@ -3669,12 +3683,12 @@ def deploy_instructions(mo):
 
         <div style="margin-top: 15px;">
             <b>▶ Спосіб 1: DevOps-стандарт (Через Makefile)</b>
-            <pre style="background-color: #111827; color: #10b981; padding: 12px; border-radius: 8px; border: 1px solid #374151; font-family: monospace; font-size: 13px; margin-top: 5px;"><code>make api-hw1</code></pre>
+            <pre style="background-color: {_pre_bg}; color: {_pre_text_cmd}; padding: 12px; border-radius: 8px; border: 1px solid {_pre_border}; font-family: monospace; font-size: 13px; margin-top: 5px;"><code>make api-hw1</code></pre>
         </div>
 
         <div style="margin-top: 15px;">
             <b>▶ Спосіб 2: Ручний запуск</b>
-            <pre style="background-color: #111827; color: #e5e7eb; padding: 12px; border-radius: 8px; border: 1px solid #374151; font-family: monospace; font-size: 13px; margin-top: 5px;"><code>cd models/california_housing
+            <pre style="background-color: {_pre_bg}; color: {_pre_text_code}; padding: 12px; border-radius: 8px; border: 1px solid {_pre_border}; font-family: monospace; font-size: 13px; margin-top: 5px;"><code>cd models/california_housing
     uvicorn api:app --host 0.0.0.0 --port 8000 --reload</code></pre>
         </div>
 
