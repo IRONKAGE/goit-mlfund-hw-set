@@ -45,7 +45,7 @@ PYTHON_CMD := $(shell command -v python3 2>/dev/null || command -v python 2>/dev
 UV := $(PYTHON_CMD) -m uv
 MIN_RAM_GB := 8
 
-.PHONY: help check-resources setup clean deep-clean run-hw1
+.PHONY: help check-resources setup clean deep-clean run-hw1 run-hw2 api-hw1 api-hw2
 
 # Дефолтна ціль
 help:
@@ -60,9 +60,11 @@ help:
 	@echo ""
 	@echo "$(YELLOW)📡 Команди запуску проектів (Marimo Notebooks):$(RESET)"
 	@echo "  $(CYAN)make run-hw1$(RESET)      - 🏡 ДЗ №1: Лінійна регресія та 3D-картографія Каліфорнії"
+	@echo "  $(CYAN)make run-hw2$(RESET)      - 🌦️  ДЗ №2: Логістична регресія та прогноз погоди Австралії"
 	@echo ""
 	@echo "$(YELLOW)🌐 MLOps: Розгортання Production API (FastAPI):$(RESET)"
 	@echo "  $(GREEN)make api-hw1$(RESET)      - 🏡 ДЗ №1: Мікросервіс California Housing на порту 8000"
+	@echo "  $(GREEN)make api-hw2$(RESET)      - 🌦️  ДЗ №2: Мікросервіс Rain Classifier на порту 8000"
 	@echo "$(CYAN)================================================================================$(RESET)"
 
 # ------------------------------------------------------------------------------
@@ -133,6 +135,10 @@ run-hw1:
 	@echo "$(CYAN)🏡 Запуск Marimo для California Housing...$(RESET)"
 	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_01_california/hw_01_linreg.py
 
+run-hw2:
+	@echo "$(CYAN)🌦️  Запуск Marimo для Rain in Australia...$(RESET)"
+	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_02_australia/hw_02_logreg.py
+
 # ------------------------------------------------------------------------------
 # 3. ЗАПУСК РОЗГОРТАННЯ MLOps (FastAPI + Scalar)
 # ------------------------------------------------------------------------------
@@ -145,6 +151,16 @@ api-hw1:
 	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
 	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
 	@cd models/california_housing && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+
+api-hw2:
+	@echo "$(CYAN)🚀 Запуск мікросервісу FastAPI (Rain in Australia)...$(RESET)"
+	@if [ ! -f models/rain_in_australia/api.py ]; then \
+		echo "$(RED)❌ Помилка: api.py не знайдено! Спочатку згенеруйте артефакти моделі в Marimo.$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
+	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
+	@cd models/rain_in_australia && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 
 # ------------------------------------------------------------------------------
 # 4. ОЧИЩЕННЯ СМІТТЯ ТА КЕШІВ
