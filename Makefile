@@ -4,29 +4,29 @@
 
 # 1. Експорт змінних середовища (якщо файл існує)
 ifneq (,$(wildcard ./.env))
-	include .env
-	export $(shell awk -F= '/^[a-zA-Z_]/ {print $$1}' .env)
+    include .env
+    export $(shell awk -F= '/^[a-zA-Z_]/ {print $$1}' .env)
 endif
 
 # 2. Кросплатформна підтримка ОС та збір інформації про залізо (OS, Arch, RAM)
 ifeq ($(OS),Windows_NT)
-	OPEN_CMD := start ""
-	SYS_OS_NAME := Windows
-	SYS_CPU_ARCH := $(PROCESSOR_ARCHITECTURE)
-	SYS_RAM_GB := $(shell powershell -NoProfile -Command "[math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB)")
+    OPEN_CMD := start ""
+    SYS_OS_NAME := Windows
+    SYS_CPU_ARCH := $(PROCESSOR_ARCHITECTURE)
+    SYS_RAM_GB := $(shell powershell -NoProfile -Command "[math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB)")
 else
-	UNAME_S := $(shell uname -s)
-	SYS_CPU_ARCH := $(shell uname -m)
-	ifeq ($(UNAME_S),Linux)
-		OPEN_CMD := xdg-open
-		SYS_OS_NAME := $(shell grep '^PRETTY_NAME=' /etc/os-release | cut -d '"' -f 2 || echo "Linux")
-		SYS_RAM_GB := $(shell awk '/MemTotal/ {printf "%.0f", $$2/1024/1024}' /proc/meminfo)
-	endif
-	ifeq ($(UNAME_S),Darwin)
-		OPEN_CMD := open
-		SYS_OS_NAME := $(shell sw_vers -productName) $(shell sw_vers -productVersion)
-		SYS_RAM_GB := $(shell expr $$(sysctl -n hw.memsize) / 1073741824)
-	endif
+    UNAME_S := $(shell uname -s)
+    SYS_CPU_ARCH := $(shell uname -m)
+    ifeq ($(UNAME_S),Linux)
+        OPEN_CMD := xdg-open
+        SYS_OS_NAME := $(shell grep '^PRETTY_NAME=' /etc/os-release | cut -d '"' -f 2 || echo "Linux")
+        SYS_RAM_GB := $(shell awk '/MemTotal/ {printf "%.0f", $$2/1024/1024}' /proc/meminfo)
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        OPEN_CMD := open
+        SYS_OS_NAME := $(shell sw_vers -productName) $(shell sw_vers -productVersion)
+        SYS_RAM_GB := $(shell expr $$(sysctl -n hw.memsize) / 1073741824)
+    endif
 endif
 
 # 3. Кольори для термінала
@@ -45,7 +45,7 @@ PYTHON_CMD := $(shell command -v python3 2>/dev/null || command -v python 2>/dev
 UV := $(PYTHON_CMD) -m uv
 MIN_RAM_GB := 8
 
-.PHONY: help check-resources setup clean deep-clean run-hw1 run-hw2 run-hw3 run-hw4 api-hw1 api-hw2 api-hw3 api-hw4
+.PHONY: help check-resources setup clean deep-clean run-hw1 run-hw2 run-hw3 run-hw4 run-hw5 api-hw1 api-hw2 api-hw3 api-hw4 api-hw5
 
 # Дефолтна ціль
 help:
@@ -63,12 +63,14 @@ help:
 	@echo "  $(CYAN)make run-hw2$(RESET)      - 🌦️  ДЗ №2: Логістична регресія та прогноз погоди Австралії"
 	@echo "  $(CYAN)make run-hw3$(RESET)      - 💼 ДЗ №3: Складні конвеєри KNN та прогнозування зарплат"
 	@echo "  $(CYAN)make run-hw4$(RESET)      - 🚗 ДЗ №4: Дерева рішень, Ансамблі та аналіз важливих ознак"
+	@echo "  $(CYAN)make run-hw5$(RESET)      - 🏗️  ДЗ №5: KMeans/3D PCA та аналіз рецептур міцності бетону"
 	@echo ""
 	@echo "$(YELLOW)🌐 MLOps: Розгортання Production API (FastAPI):$(RESET)"
 	@echo "  $(GREEN)make api-hw1$(RESET)      - 🏡 ДЗ №1: Мікросервіс California Housing на порту 8000"
 	@echo "  $(GREEN)make api-hw2$(RESET)      - 🌦️  ДЗ №2: Мікросервіс Rain Classifier на порту 8000"
 	@echo "  $(GREEN)make api-hw3$(RESET)      - 💼 ДЗ №3: Мікросервіс Salary Prediction на порту 8000"
 	@echo "  $(GREEN)make api-hw4$(RESET)      - 🚗 ДЗ №4: Мікросервіс CarDekho Pricing на порту 8000"
+	@echo "  $(GREEN)make api-hw5$(RESET)      - 🏗️  ДЗ №5: Мікросервіс Concrete Strength на порту 8000"
 	@echo "$(CYAN)================================================================================$(RESET)"
 
 # ------------------------------------------------------------------------------
@@ -151,6 +153,10 @@ run-hw4:
 	@echo "$(CYAN)🚗 Запуск Marimo для Autos & CarDekho Pricing...$(RESET)"
 	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_04_cars/hw_04_trees_ensemble.py
 
+run-hw5:
+	@echo "$(CYAN)🏗️  Запуск Marimo для Concrete Strength...$(RESET)"
+	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_05_concrete/hw_05_kmeans_xgb.py
+
 # ------------------------------------------------------------------------------
 # 3. ЗАПУСК РОЗГОРТАННЯ MLOps (FastAPI + Scalar)
 # ------------------------------------------------------------------------------
@@ -193,6 +199,16 @@ api-hw4:
 	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
 	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
 	@cd models/cardekho_pricing && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+
+api-hw5:
+	@echo "$(CYAN)🚀 Запуск мікросервісу FastAPI (Concrete Strength)...$(RESET)"
+	@if [ ! -f models/concrete_strength/api.py ]; then \
+		echo "$(RED)❌ Помилка: api.py не знайдено! Спочатку згенеруйте артефакти моделі в Marimo.$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
+	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
+	@cd models/concrete_strength && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 
 # ------------------------------------------------------------------------------
 # 4. ОЧИЩЕННЯ СМІТТЯ ТА КЕШІВ

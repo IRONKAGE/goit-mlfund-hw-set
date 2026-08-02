@@ -986,7 +986,7 @@ def header_benchmark(mo):
     return
 
 
-@app.cell(hide_code=True)
+@app.cell
 def execute_benchmark(
     ColumnTransformer,
     GLOBAL_SEED,
@@ -2037,7 +2037,7 @@ def what_if_ui(X_cd, mo):
     return (sim_panel,)
 
 
-@app.cell(hide_code=True)
+@app.cell
 def simulate_what_if(
     X_cd,
     champion_selector,

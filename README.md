@@ -20,7 +20,7 @@
 
 ### 🎨 Core Frameworks & UI
 
-- [![marimo 0.23.11](https://img.shields.io/badge/marimo-0.23.11-F0EDF9.svg?logo=loop&logoColor=white)](https://pypi.org/project/marimo/0.23.11/) 🔸 Реактивне Python-середовище нового покоління (заміна Jupyter)
+- [![marimo 0.23.15](https://img.shields.io/badge/marimo-0.23.15-F0EDF9.svg?logo=loop&logoColor=white)](https://pypi.org/project/marimo/0.23.15/) 🔸 Реактивне Python-середовище нового покоління (заміна Jupyter)
 - [![ipysigma 0.24.6](https://img.shields.io/badge/ipysigma-0.24.6-2b3137.svg?logo=semanticui&logoColor=white)](https://pypi.org/project/ipysigma/0.24.6/) 🔸 WebGL-рушій для рендерингу складних інтерактивних графів
 - [![streamlit 1.58.0](https://img.shields.io/badge/streamlit-1.58.0-FF4B4B.svg?logo=streamlit&logoColor=white)](https://pypi.org/project/streamlit/1.58.0/) 🔸 Фреймворк для розгортання BI-дашбордів
 - [![plotly 6.8.0](https://img.shields.io/badge/plotly-6.8.0-3F4F75.svg?logo=plotly&logoColor=white)](https://pypi.org/project/plotly/6.8.0/) 🔸 Інтерактивна багатовимірна візуалізація та аналіз залишків
@@ -42,6 +42,8 @@
 - [![xgboost 3.3.0](https://img.shields.io/badge/xgboost-3.3.0-1B85D3.svg?logo=apacherocketmq&logoColor=white)](https://pypi.org/project/xgboost/3.3.0/) 🔸 Екстремальний градієнтний бустинг із нативною підтримкою категоріальних ознак
 - [![lightgbm 4.6.0](https://img.shields.io/badge/lightgbm-4.6.0-00A9E0.svg?logo=slint&logoColor=white)](https://pypi.org/project/lightgbm/4.6.0/) 🔸 Високопродуктивний градієнтний бустинг від Microsoft (енсемблінг)
 - [![interpret 0.7.8](https://img.shields.io/badge/interpret-0.7.8-1976D2.svg?logo=avm&logoColor=white)](https://pypi.org/project/interpret/0.7.8/) 🔸 Explainable Boosting Machine (EBM) для глибокої інтерпретації прийняття рішень
+- [![shap 0.49.1](https://img.shields.io/badge/shap-0.49.1-FFB300.svg?logo=googlebigtable&logoColor=white)](https://pypi.org/project/shap/0.49.1/) 🔸 Квантова пояснюваність моделей (SHAP values) на основі теорії кооперативних ігор
+- [![yellowbrick 1.5](https://img.shields.io/badge/yellowbrick-1.5-F0AD4E.svg?logo=labex&logoColor=white)](https://pypi.org/project/yellowbrick/1.5/) 🔸 Візуалізація кластеризації (KElbowVisualizer) та діагностика ML-моделей
 - [![imbalanced-learn 0.14.2](https://img.shields.io/badge/imbalanced--learn-0.14.2-FF6600.svg?logo=scikit-learn&logoColor=white)](https://pypi.org/project/imbalanced-learn/0.14.2/) 🔸 Інженерія дисбалансу класів (SMOTE, ADASYN)
 - [![prophet 1.3.0](https://img.shields.io/badge/prophet-1.3.0-0668E1.svg?logo=meta&logoColor=white)](https://pypi.org/project/prophet/1.3.0/) 🔸 SOTA-алгоритм від Meta для прогнозування часових рядів
 
@@ -105,6 +107,12 @@ goit-mlfund-hw-set/
 │   ├── ui_labels.py            # 🇺🇦 Словник перекладів ознак для SHAP та UI
 │   └── README.md               # 📜 Опис завдання до модуля "Підходи до покращення якості" та Висновки
 │
+├── hw_05_concrete/             # 🏗️ Проект 5: Concrete Strength
+│   ├── data_adapters.py        # 🛟 Локальний Fallback-генератор рецептур бетону
+│   ├── hw_05_kmeans_xgb.py     # 📒 Marimo-ноутбук (KMeans, 3D PCA, Radar, XGBoost/LightGBM, Optuna, SHAP, TimesFM, FastAPI)
+│   ├── ui_labels.py            # 🇺🇦 Словник перекладів хімічних інгредієнтів бетону
+│   └── README.md               # 📜 Опис завдання до модуля "Алгоритми навчання без вчителя" та Висновки
+│
 ├── img/                        # 🖼️ Зображення та ассети для документації репозиторію
 │
 ├── mlruns/                     # 🗄️ База даних експериментів та реєстр моделей (MLflow Tracking)
@@ -120,6 +128,11 @@ goit-mlfund-hw-set/
 │   │   ├── Dockerfile              # 🐳 Артефакт: Інструкція для контейнеризації мікросервісу
 │   │   ├── features_schema.json    # 📝 Артефакт: Маніфест типів та назв ознак для API
 │   │   └── champion_cardekho_rf.joblib # 🧠 Артефакт: Ваги оптимізованої моделі Random Forest
+│   ├── concrete_strength/          # 📦 Ізольована капсула мікросервісу (Проект 5)
+│   │   ├── api.py                  # 🚀 Артефакт: Згенерований FastAPI-мікросервіс із Scalar UI
+│   │   ├── Dockerfile              # 🐳 Артефакт: Інструкція для контейнеризації пайплайну
+│   │   ├── features_schema.json    # 📝 Артефакт: Маніфест ознак (без ColumnTransformer, чисті матриці)
+│   │   └── [model]_champion.joblib # 🧠 Артефакт: Ваги оптимізованої моделі (XGBoost/LightGBM)
 │   ├── rain_in_australia/          # 📦 Ізольована капсула мікросервісу (Проект 2)
 │   │   ├── api.py                  # 🚀 Артефакт: Згенерований FastAPI-мікросервіс (Probabilistic API)
 │   │   ├── Dockerfile              # 🐳 Артефакт: Інструкція для контейнеризації мікросервісу
@@ -131,11 +144,12 @@ goit-mlfund-hw-set/
 │   │   ├── features_schema.json    # 📝 Артефакт: Маніфест ознак для API
 │   │   └── pipeline_champion.joblib# 🧠 Артефакт: Ваги оптимізованої моделі KNN та трансформерів
 │   ├── .gitkeep                    # ⚠️ Маркер для збереження директорії у Git (самі моделі ігноруються)
-│   ├── hw01_california_housing_eda.html # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 1
-│   ├── hw02_australia_weather_eda.html  # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 2
-│   ├── hw03_salary_eda.html             # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 3
+│   ├── hw01_california_housing_eda.html # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 1 (California)
+│   ├── hw02_australia_weather_eda.html  # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 2 (Australia)
+│   ├── hw03_salary_eda.html             # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 3 (Salary)
 │   ├── hw04_autos_eda.html              # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 4 (Autos)
-│   └── hw04_cardekho_eda.html           # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 4 (CarDekho)
+│   ├── hw04_cardekho_eda.html           # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 4 (CarDekho)
+│   └── hw05_concrete_eda.html           # 📊 Звіт розвідувального аналізу даних (Auto-EDA) під Проект 5 (Concrete Strength)
 │
 ├── etl_pipeline.log            # 📝 Логи виконання процесів екстракції та трансформації даних
 ├── .editorconfig               # 📝 Стандарти форматування коду для командної розробки
@@ -148,11 +162,13 @@ goit-mlfund-hw-set/
 └── requirements.txt            # 📦 Точно зафіксовані залежності Python (PEP 508 сумісні v2026.06)
 ```
 
-- **Core Інфраструктура (`/core`):** Відокремлене від ноутбуків системне ядро. Відповідає за інтелектуальну маршрутизацію апаратного забезпечення, безпечне атомарне завантаження даних (захист від битих архівів, 416 помилок та API Rate Limits ), а також забезпечення 100% відтворюваності експериментів (Global Seed)
-- [**California Housing (`HW 01`):**](./hw_01_california/README.md) Комплексний ML- пайплайн для прогнозування вартості нерухомості. Включає просторову кластеризацію (`DBSCAN`), енсемблінг (`XGBoost`, `LightGBM`), перевіряючи гіпотези на гомоскедастичність залишків, байєсівську оптимізацію гіперпараметрів (`Optuna`), 3D візуалізацію дерев рішень засобами *WebGL* та автоматичну MLOps-серіалізацію у **FastAPI мікросервіс** із суворими Pydantic-контрактами та інтегрованою OpenAPI документацією через **Scalar**.
+- **Core Інфраструктура (`/core`):** Відокремлене від ноутбуків системне ядро. Відповідає за інтелектуальну маршрутизацію апаратного забезпечення, безпечне атомарне завантаження даних (захист від битих архівів, 416 помилок та API Rate Limits), а також забезпечення 100% відтворюваності експериментів (Global Seed).
+- **DevOps & MLOps Оркестрація (`Makefile` & `/models`):** Центральний пульт керування репозиторієм. Забезпечує Zero-Config розгортання: від створення надшвидкого віртуального середовища (`uv`) та підняття UI-сервера `Marimo` до трекінгу експериментів у `MLflow` (`/mlruns`) та автоматизованої збірки ізольованих Docker-контейнерів для мікросервісів.
+- [**California Housing (`HW 01`):**](./hw_01_california/README.md) Комплексний ML-пайплайн для прогнозування вартості нерухомості. Включає просторову кластеризацію (`DBSCAN`), ансамблювання (`XGBoost`, `LightGBM`), перевірку гіпотез на гомоскедастичність залишків, байєсівську оптимізацію гіперпараметрів (`Optuna`), 3D візуалізацію дерев рішень засобами *WebGL* та автоматичну MLOps-серіалізацію у **FastAPI мікросервіс** із суворими Pydantic-контрактами та інтегрованою OpenAPI документацією через **Scalar**.
 - [**Rain in Australia (`HW 02`):**](./hw_02_australia/README.md) Просунутий ML-пайплайн для ймовірнісної бінарної класифікації метеоумов. Фокусується на архітектурному усуненні Data Leakage через сувору хронологічну валідацію (`Out-of-Time Split`) та циклічне тригонометричне кодування простору й часу. Включає боротьбу з дисбалансом (`SMOTE`), динамічну оптимізацію порогу чутливості (Threshold Optimization), масштабний бенчмаркінг алгоритмів (`XGBoost`, `LightGBM`, `EBM`) з трекінгом у `MLflow`, пояснюваність моделі через `SHAP`, а також магію Zero-Shot прогнозування за допомогою фундаментальної моделі **Google TimesFM**. Завершується пакуванням у **FastAPI мікросервіс** (Docker) із ймовірнісним контрактом відповідей.
-- [**Salaries Estimation (`HW 03`):**](./hw_03_salaries/README.md) Побудова прогностичної моделі регресії з фокусом на подолання "прокляття розмірності" простору ознак для просторових алгоритмів (`KNN`). Включає глибоку трансформацію даних через `PowerTransformer` (Yeo-Johnson) та `TargetEncoder`, байєсівську оптимізацію гіперпараметрів (`Optuna`), бенчмаркінг пулу алгоритмів (`Random Forest`, `XGBoost`) та унікальну 3D-візуалізацію математичних відстаней (**Corporate Twin Radar**). Проєкт розширено модулями пояснюваності `Permutation Importance` та `SHAP`, Zero-Shot прогнозуванням інфляції заробітних плат за допомогою **Google TimesFM**, а також автоматичною серіалізацією повного графа (`ColumnTransformer` + Model) у готовий до розгортання **FastAPI мікросервіс** (Docker).
-- [**Autos & CarDekho Pricing (`HW 04`):**](./hw_04_cars/README.md) Комплексний ML-пайплайн для регресійного прогнозування вартості автомобілів із глибоким фокусом на оцінку інформативності ознак та розкриття "чорних скриньок" ансамблів. Включає автоматичний розвідувальний аналіз (`Auto-EDA`), математичне порівняння ізольованої статистичної взаємної інформації (`Mutual Information`) з алгоритмічною важливістю ознак (`Feature Importance`), бенчмаркінг еволюції алгоритмів (від одиночного `CART` до `XGBoost` та `LightGBM`) із трекінгом у `MLflow`, а також байєсівську оптимізацію (`Optuna`). Проєкт відзначається інтеграцією методів глобальної та квантової пояснюваності (`Permutation Importance`, `SHAP`), бізнес-орієнтованим інтерактивним **What-If Симулятором** кривої знецінення авто, та традиційно завершується автоматичною серіалізацією повного конвеєра у готовий до розгортання **FastAPI мікросервіс** (Docker) зі **Scalar** UI.
+- [**Salaries Estimation (`HW 03`):**](./hw_03_salaries/README.md) Побудова прогностичної моделі регресії з фокусом на подолання "прокляття розмірності" простору ознак для просторових алгоритмів (`KNN`). Включає глибоку трансформацію даних через `PowerTransformer` (Yeo-Johnson) та `TargetEncoder`, байєсівську оптимізацію гіперпараметрів (`Optuna`), бенчмаркінг пулу алгоритмів (`Random Forest`, `XGBoost`) та унікальну 3D-візуалізацію математичних відстаней (**Corporate Twin Radar**). Проект розширено модулями пояснюваності `Permutation Importance` та `SHAP`, Zero-Shot прогнозуванням інфляції заробітних плат за допомогою **Google TimesFM**, а також автоматичною серіалізацією повного графа (`ColumnTransformer` + Model) у готовий до розгортання **FastAPI мікросервіс** (Docker).
+- [**Autos & CarDekho Pricing (`HW 04`):**](./hw_04_cars/README.md) Комплексний ML-пайплайн для регресійного прогнозування вартості автомобілів із глибоким фокусом на оцінку інформативності ознак та розкриття "чорних скриньок" ансамблів. Включає автоматичний розвідувальний аналіз (`Auto-EDA`), математичне порівняння ізольованої статистичної взаємної інформації (`Mutual Information`) з алгоритмічною важливістю ознак (`Feature Importance`), бенчмаркінг еволюції алгоритмів (від одиночного `CART` до `XGBoost` та `LightGBM`) із трекінгом у `MLflow`, а також байєсівську оптимізацію (`Optuna`). Проект відзначається інтеграцією методів глобальної та квантової пояснюваності (`Permutation Importance`, `SHAP`), бізнес-орієнтованим інтерактивним **What-If Симулятором** кривої знецінення авто, та традиційно завершується автоматичною серіалізацією повного конвеєра у готовий до розгортання **FastAPI мікросервіс** (Docker) зі **Scalar** UI.
+- [**Concrete Strength (`HW 05`):**](./hw_05_concrete/README.md) Комплексний гібридний ML-пайплайн, що об'єднує навчання без вчителя та з вчителем для глибинного дослідження хімічних рецептур бетону. Включає пошук прихованих структурних патернів через математичне стиснення розмірності (`PCA`), визначення оптимальної кількості кластерів $K$ методом ліктя (`KElbowVisualizer`), кластеризацію (`KMeans`) та профілювання сумішей через 3D-простір і радарні діаграми. Архітектуру розширено масштабним бенчмаркінгом ансамблів (`XGBoost`, `LightGBM`) для високоточного прогнозування міцності на стиск, байєсівською оптимізацією (`Optuna`) з трекінгом у `MLflow`, та розкриттям "чорної скриньки" моделі за допомогою глобальної і квантової пояснюваності (`SHAP`). Проект відзначається застосуванням 200-мільйонної фундаментальної моделі **Google TimesFM** для Zero-Shot симуляції логарифмічної кривої твердіння бетону (Curing Curve) та фінальним пакуванням оптимізованого числового рушія у готовий до розгортання **FastAPI мікросервіс** (Docker) із суворими Pydantic-контрактами і **Scalar** UI.
 
 ## 🪬 Швидкий старт
 
@@ -163,3 +179,9 @@ goit-mlfund-hw-set/
 ```bash
 make
 ```
+
+## 💝 Контакти
+
+Якщо цей репозиторій здався вам цікавим, і ви шукаєте інженера, який здатен побудувати надійний Data Science / MLOps пайплайн — буду радий поспілкуватися!
+
+- **LinkedIn:** [IRONKAGE](https://www.linkedin.com/in/ironkage)

@@ -843,7 +843,7 @@ def wow_factor_twin_radar(
     y_train,
     y_valid,
 ):
-    with mo.status.spinner("Проєкція багатовимірного простору у 3D та пошук сусідів..."):
+    with mo.status.spinner("Проекція багатовимірного простору у 3D та пошук сусідів..."):
         # 1. Трансформуємо дані для математики (Тренувальні та Валідаційні)
         _X_train_proc = preprocessor.fit_transform(X_train, y_train)
         _X_valid_proc = preprocessor.transform(X_valid)
