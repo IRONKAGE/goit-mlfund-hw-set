@@ -45,7 +45,7 @@ PYTHON_CMD := $(shell command -v python3 2>/dev/null || command -v python 2>/dev
 UV := $(PYTHON_CMD) -m uv
 MIN_RAM_GB := 8
 
-.PHONY: help check-resources setup clean deep-clean run-hw1 run-hw2 run-hw3 run-hw4 run-hw5 api-hw1 api-hw2 api-hw3 api-hw4 api-hw5
+.PHONY: help check-resources setup clean deep-clean run-hw1 run-hw2 run-hw3 run-hw4 run-hw5 run-fp api-hw1 api-hw2 api-hw3 api-hw4 api-hw5 api-fp
 
 # Дефолтна ціль
 help:
@@ -64,6 +64,7 @@ help:
 	@echo "  $(CYAN)make run-hw3$(RESET)      - 💼 ДЗ №3: Складні конвеєри KNN та прогнозування зарплат"
 	@echo "  $(CYAN)make run-hw4$(RESET)      - 🚗 ДЗ №4: Дерева рішень, Ансамблі та аналіз важливих ознак"
 	@echo "  $(CYAN)make run-hw5$(RESET)      - 🏗️  ДЗ №5: KMeans/3D PCA та аналіз рецептур міцності бетону"
+	@echo "  $(CYAN)make run-fp$(RESET)       - 🤼‍♂️ Фінальний проект: SMOTE + XGBoost для класифікації"
 	@echo ""
 	@echo "$(YELLOW)🌐 MLOps: Розгортання Production API (FastAPI):$(RESET)"
 	@echo "  $(GREEN)make api-hw1$(RESET)      - 🏡 ДЗ №1: Мікросервіс California Housing на порту 8000"
@@ -156,6 +157,10 @@ run-hw4:
 run-hw5:
 	@echo "$(CYAN)🏗️  Запуск Marimo для Concrete Strength...$(RESET)"
 	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_05_concrete/hw_05_kmeans_xgb.py
+
+run-fp:
+	@echo "$(CYAN)🤼‍♂️  Запуск Marimo для Kaggle Customer Churn...$(RESET)"
+	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_fp_kaggle/fp_smote_xgb.py
 
 # ------------------------------------------------------------------------------
 # 3. ЗАПУСК РОЗГОРТАННЯ MLOps (FastAPI + Scalar)
