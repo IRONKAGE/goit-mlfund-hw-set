@@ -2073,7 +2073,7 @@ def simulate_what_if(
         'Owner': [int(_vals['owner'])] * len(_ages)
     }
 
-    # Адаптація під колонку років у вашому датасеті
+    # Адаптація під колонку років у вашому наборі даних
     if 'Car_Age' in X_cd.columns:
         _synth_data['Car_Age'] = _ages
     if 'Year' in X_cd.columns:

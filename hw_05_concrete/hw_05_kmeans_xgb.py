@@ -336,7 +336,7 @@ def execute_etl(
     _data_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data'))
     os.makedirs(_data_path, exist_ok=True)
 
-    with mo.status.spinner(title="Завантаження датасету Concrete Strength..."):
+    with mo.status.spinner(title="Завантаження набору даних Concrete Strength..."):
         _downloader = SecureDownloader(
             dataset_path="prathamtripathi/regression-with-neural-networking",
             data_dir=_data_path,

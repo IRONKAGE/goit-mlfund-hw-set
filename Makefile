@@ -14,9 +14,11 @@ ifeq ($(OS),Windows_NT)
     SYS_OS_NAME := Windows
     SYS_CPU_ARCH := $(PROCESSOR_ARCHITECTURE)
     SYS_RAM_GB := $(shell powershell -NoProfile -Command "[math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory / 1GB)")
+    VENV_PY := $(VENV)/Scripts/python
 else
     UNAME_S := $(shell uname -s)
     SYS_CPU_ARCH := $(shell uname -m)
+    VENV_PY := $(VENV)/bin/python
     ifeq ($(UNAME_S),Linux)
         OPEN_CMD := xdg-open
         SYS_OS_NAME := $(shell grep '^PRETTY_NAME=' /etc/os-release | cut -d '"' -f 2 || echo "Linux")
@@ -64,7 +66,7 @@ help:
 	@echo "  $(CYAN)make run-hw3$(RESET)      - 💼 ДЗ №3: Складні конвеєри KNN та прогнозування зарплат"
 	@echo "  $(CYAN)make run-hw4$(RESET)      - 🚗 ДЗ №4: Дерева рішень, Ансамблі та аналіз важливих ознак"
 	@echo "  $(CYAN)make run-hw5$(RESET)      - 🏗️  ДЗ №5: KMeans/3D PCA та аналіз рецептур міцності бетону"
-	@echo "  $(CYAN)make run-fp$(RESET)       - 🤼‍♂️ Фінальний проект: SMOTE + XGBoost для класифікації"
+	@echo "  $(CYAN)make run-fp$(RESET)       - 🤼‍♂️ Фінальний проект: Customer Churn Kaggle Challenge"
 	@echo ""
 	@echo "$(YELLOW)🌐 MLOps: Розгортання Production API (FastAPI):$(RESET)"
 	@echo "  $(GREEN)make api-hw1$(RESET)      - 🏡 ДЗ №1: Мікросервіс California Housing на порту 8000"
@@ -72,6 +74,7 @@ help:
 	@echo "  $(GREEN)make api-hw3$(RESET)      - 💼 ДЗ №3: Мікросервіс Salary Prediction на порту 8000"
 	@echo "  $(GREEN)make api-hw4$(RESET)      - 🚗 ДЗ №4: Мікросервіс CarDekho Pricing на порту 8000"
 	@echo "  $(GREEN)make api-hw5$(RESET)      - 🏗️  ДЗ №5: Мікросервіс Concrete Strength на порту 8000"
+	@echo "  $(GREEN)make api-fp$(RESET)       - 🤼‍♂️ ФП: Мікросервіс Kaggle Customer Churn на порту 8000"
 	@echo "$(CYAN)================================================================================$(RESET)"
 
 # ------------------------------------------------------------------------------
@@ -140,27 +143,27 @@ endif
 # ------------------------------------------------------------------------------
 run-hw1:
 	@echo "$(CYAN)🏡 Запуск Marimo для California Housing...$(RESET)"
-	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_01_california/hw_01_linreg.py
+	PYTHONPATH=. $(VENV_PY) -m marimo edit --watch hw_01_california/hw_01_linreg.py
 
 run-hw2:
 	@echo "$(CYAN)🌦️  Запуск Marimo для Rain in Australia...$(RESET)"
-	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_02_australia/hw_02_logreg.py
+	PYTHONPATH=. $(VENV_PY) -m marimo edit --watch hw_02_australia/hw_02_logreg.py
 
 run-hw3:
 	@echo "$(CYAN)💼 Запуск Marimo для Salaries Estimation...$(RESET)"
-	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_03_salaries/hw_03_knn.py
+	PYTHONPATH=. $(VENV_PY) -m marimo edit --watch hw_03_salaries/hw_03_knn.py
 
 run-hw4:
 	@echo "$(CYAN)🚗 Запуск Marimo для Autos & CarDekho Pricing...$(RESET)"
-	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_04_cars/hw_04_trees_ensemble.py
+	PYTHONPATH=. $(VENV_PY) -m marimo edit --watch hw_04_cars/hw_04_trees_ensemble.py
 
 run-hw5:
 	@echo "$(CYAN)🏗️  Запуск Marimo для Concrete Strength...$(RESET)"
-	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_05_concrete/hw_05_kmeans_xgb.py
+	PYTHONPATH=. $(VENV_PY) -m marimo edit --watch hw_05_concrete/hw_05_kmeans_xgb.py
 
 run-fp:
 	@echo "$(CYAN)🤼‍♂️  Запуск Marimo для Kaggle Customer Churn...$(RESET)"
-	PYTHONPATH=. $(VENV)/bin/python -m marimo edit --watch hw_fp_kaggle/fp_smote_xgb.py
+	PYTHONPATH=. $(VENV_PY) -m marimo edit --watch hw_fp_kaggle/fp_smote_xgb_2.py
 
 # ------------------------------------------------------------------------------
 # 3. ЗАПУСК РОЗГОРТАННЯ MLOps (FastAPI + Scalar)
@@ -173,7 +176,7 @@ api-hw1:
 	fi
 	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
 	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
-	@cd models/california_housing && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+	@cd models/california_housing && ../../$(VENV_PY) -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 
 api-hw2:
 	@echo "$(CYAN)🚀 Запуск мікросервісу FastAPI (Rain in Australia)...$(RESET)"
@@ -183,7 +186,7 @@ api-hw2:
 	fi
 	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
 	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
-	@cd models/rain_in_australia && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+	@cd models/rain_in_australia && ../../$(VENV_PY) -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 
 api-hw3:
 	@echo "$(CYAN)🚀 Запуск мікросервісу FastAPI (Salary Prediction)...$(RESET)"
@@ -193,7 +196,7 @@ api-hw3:
 	fi
 	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
 	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
-	@cd models/salary_prediction && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+	@cd models/salary_prediction && ../../$(VENV_PY) -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 
 api-hw4:
 	@echo "$(CYAN)🚀 Запуск мікросервісу FastAPI (CarDekho Pricing)...$(RESET)"
@@ -203,7 +206,7 @@ api-hw4:
 	fi
 	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
 	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
-	@cd models/cardekho_pricing && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+	@cd models/cardekho_pricing && ../../$(VENV_PY) -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 
 api-hw5:
 	@echo "$(CYAN)🚀 Запуск мікросервісу FastAPI (Concrete Strength)...$(RESET)"
@@ -213,7 +216,17 @@ api-hw5:
 	fi
 	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
 	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
-	@cd models/concrete_strength && ../../$(VENV)/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+	@cd models/concrete_strength && ../../$(VENV_PY) -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+
+api-fp:
+	@echo "$(CYAN)🚀 Запуск мікросервісу FastAPI (Kaggle Customer Churn)...$(RESET)"
+	@if [ ! -f models/customer_churn/api.py ]; then \
+		echo "$(RED)❌ Помилка: api.py не знайдено! Спочатку згенеруйте артефакти моделі в Marimo.$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)📡 Сервер доступний за адресою: http://127.0.0.1:8000$(RESET)"
+	@echo "$(YELLOW)📚 Scalar UI (Сучасна Документація API): http://127.0.0.1:8000/docs$(RESET)"
+	@cd models/customer_churn && ../../$(VENV_PY) -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
 
 # ------------------------------------------------------------------------------
 # 4. ОЧИЩЕННЯ СМІТТЯ ТА КЕШІВ
